@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Order struct {
-	ID          string    `gorm:"primaryKey"`
+	ID          string    `gorm:"not null;primaryKey"`
 	ItemID      string    `gorm:"not null;index"`
 	Observation *string   `gorm:"type:text"`
 	Quantity    uint      `gorm:"not null;default:1"`

@@ -102,7 +102,7 @@ func initDependencies(deps dependencies) {
 	spew.Dump("Item List", items)
 
 	order, err := menuSvc.PlaceOrder(context.Background(), menu.PlaceOrderOpts{
-		ItemID:      "2b475053-87af-47e8-b5da-fb25db398267",
+		ItemID:      "c074edbd-2984-4136-b48b-a498ab52ab88",
 		Observation: utils.Pointer("decaf please"),
 		Quantity:    1,
 	})
