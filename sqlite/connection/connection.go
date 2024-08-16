@@ -5,8 +5,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func Open() (*DB, error) {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+type DbConfig struct {
+	Name string
+}
+
+func Open(config DbConfig) (*DB, error) {
+	db, err := gorm.Open(sqlite.Open(config.Name), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
