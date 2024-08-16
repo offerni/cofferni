@@ -4,6 +4,8 @@ import (
 	"context"
 )
 
+type OrderID string
+
 type Order struct {
 	ID          string
 	ItemID      string
@@ -12,7 +14,7 @@ type Order struct {
 }
 
 type OrderCreateOpts struct {
-	ItemID      string
+	ItemID      ItemID
 	Observation *string
 	Quantity    uint
 }
@@ -28,4 +30,16 @@ type OrderList struct {
 type OrderRepository interface {
 	Create(ctx context.Context, opts OrderCreateOpts) (*Order, error)
 	FindAll(ctx context.Context, opts *OrderFindAllOpts) (*OrderList, error)
+}
+
+func (opts OrderCreateOpts) Validate() error {
+	if opts.ItemID == "" {
+		return ErrItemIDIsRequired
+	}
+
+	if opts.Quantity == 0 {
+		return ErrQuantityIsRequired
+	}
+
+	return nil
 }

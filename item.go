@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+type ItemID string
+
 type Item struct {
 	ID         string
 	Name       string
@@ -22,5 +24,5 @@ type ItemList struct {
 }
 
 type ItemRepository interface {
-	FindAll(ctx context.Context, opts ItemFindAllOpts) (*ItemList, error)
+	FindAll(ctx context.Context) (*ItemList, error)
 }
