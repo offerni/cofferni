@@ -3,6 +3,7 @@ module github.com/offerni/cofferni
 go 1.22.5
 
 require (
+	github.com/davecgh/go-spew v1.1.1
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	gorm.io/driver/sqlite v1.5.6

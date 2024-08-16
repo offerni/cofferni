@@ -13,6 +13,10 @@ type NewServiceOpts struct {
 }
 
 func NewService(opts NewServiceOpts) (*Service, error) {
+	if err := opts.Validate(); err != nil {
+		return nil, err
+	}
+
 	return &Service{
 		ItemRepo:  opts.ItemRepository,
 		OrderRepo: opts.OrderRepository,
