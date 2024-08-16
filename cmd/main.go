@@ -8,6 +8,7 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/joho/godotenv"
+	"github.com/offerni/cofferni"
 	"github.com/offerni/cofferni/menu"
 	"github.com/offerni/cofferni/sqlite"
 	"github.com/offerni/cofferni/sqlite/connection"
@@ -56,6 +57,17 @@ func initializeDB() *connection.DB {
 	return db
 }
 
+func closeDbConnection(db *connection.DB) {
+	sqlDB, err := db.DB.DB()
+	if err != nil {
+		panic(err)
+	}
+
+	if err := sqlDB.Close(); err != nil {
+		log.Panicf("err closing database: %v", err)
+	}
+}
+
 type dependencies struct {
 	db *connection.DB
 }
@@ -76,6 +88,11 @@ func initDependencies(deps dependencies) {
 		panic(err)
 	}
 
+	err = seedData(itemRepo)
+	if err != nil {
+		log.Printf("err seeding data: %v", err)
+	}
+
 	// TODO: for testing purposes only
 	items, err := menuSvc.ItemList(context.Background())
 	if err != nil {
@@ -85,7 +102,7 @@ func initDependencies(deps dependencies) {
 	spew.Dump("Item List", items)
 
 	order, err := menuSvc.PlaceOrder(context.Background(), menu.PlaceOrderOpts{
-		ItemID:      "",
+		ItemID:      "2b475053-87af-47e8-b5da-fb25db398267",
 		Observation: utils.Pointer("decaf please"),
 		Quantity:    1,
 	})
@@ -103,13 +120,56 @@ func initDependencies(deps dependencies) {
 	spew.Dump("Order List", orderList)
 }
 
-func closeDbConnection(db *connection.DB) {
-	sqlDB, err := db.DB.DB()
+// seedData populates tables with pre-defined data
+func seedData(itemRepo cofferni.ItemRepository) error {
+	_, err := itemRepo.CreateAll(context.Background(), cofferni.ItemCreateAllOpts{
+		Items: []*cofferni.ItemCreateOpts{
+			{
+				Name:      "Espresso",
+				Available: true,
+			},
+			{
+				Name:      "Iced Espresso",
+				Available: true,
+			},
+			{
+				Name:      "Americano",
+				Available: true,
+			},
+			{
+				Name:      "Iced Americano",
+				Available: true,
+			},
+			{
+				Name:      "Latte",
+				Available: true,
+			},
+			{
+				Name:      "Flat White",
+				Available: true,
+			},
+			{
+				Name:      "Mocha Latte",
+				Available: true,
+			},
+			{
+				Name:      "Iced Mocha Latte",
+				Available: true,
+			},
+			{
+				Name:      "Cappuccino",
+				Available: true,
+			},
+			{
+				Name:      "Hot Chocolate",
+				Available: true,
+			},
+		},
+	})
+
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("err seeding items: %v, skipping", err)
 	}
 
-	if err := sqlDB.Close(); err != nil {
-		log.Panicf("err closing database: %v", err)
-	}
+	return nil
 }

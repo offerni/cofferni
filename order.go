@@ -9,6 +9,7 @@ type OrderID string
 
 type Order struct {
 	CreatedAt   time.Time
+	Fulfilled   bool
 	ID          OrderID
 	ItemID      ItemID
 	ModifiedAt  time.Time

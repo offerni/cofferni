@@ -19,6 +19,7 @@ func (repo *orderRepo) Create(ctx context.Context, opts cofferni.OrderCreateOpts
 		ModifiedAt:  time.Now(),
 		Observation: opts.Observation,
 		Quantity:    opts.Quantity,
+		Fulfilled:   false,
 	}
 
 	err := repo.db.DB.WithContext(ctx).Create(order).Error
@@ -34,5 +35,6 @@ func (repo *orderRepo) Create(ctx context.Context, opts cofferni.OrderCreateOpts
 		ModifiedAt:  order.ModifiedAt,
 		Observation: order.Observation,
 		Quantity:    order.Quantity,
+		Fulfilled:   order.Fulfilled,
 	}, nil
 }

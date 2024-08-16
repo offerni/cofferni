@@ -2,6 +2,7 @@ package menu
 
 import (
 	"context"
+	"time"
 
 	"github.com/offerni/cofferni"
 )
@@ -22,8 +23,10 @@ func (svc *Service) PlaceOrder(ctx context.Context, opts PlaceOrderOpts) (*Place
 	}
 
 	return &PlaceOrderResponse{
+		CreatedAt:   order.CreatedAt,
 		ID:          cofferni.OrderID(order.ID),
 		ItemID:      string(order.ItemID),
+		ModifiedAt:  order.ModifiedAt,
 		Observation: order.Observation,
 		Quantity:    order.Quantity,
 	}, nil
@@ -36,8 +39,10 @@ type PlaceOrderOpts struct {
 }
 
 type PlaceOrderResponse struct {
+	CreatedAt   time.Time
 	ID          cofferni.OrderID
 	ItemID      string
+	ModifiedAt  time.Time
 	Observation *string
 	Quantity    uint
 }

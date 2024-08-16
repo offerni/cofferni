@@ -1,13 +1,15 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Item struct {
-	ID         string `gorm:"primaryKey"`
-	Name       string
-	Available  bool
-	CreatedAt  time.Time
-	ModifiedAt time.Time
+	ID         string    `gorm:"primaryKey"`
+	Name       string    `gorm:"not null;uniqueIndex"`
+	Available  bool      `gorm:"not null;default:false"`
+	CreatedAt  time.Time `gorm:"autoCreateTime"`
+	ModifiedAt time.Time `gorm:"autoUpdateTime"`
 }
 
 func (Item) TableName() string {

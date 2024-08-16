@@ -23,6 +23,16 @@ type ItemList struct {
 	// pagintion later maybe
 }
 
+type ItemCreateOpts struct {
+	Available bool
+	Name      string
+}
+
+type ItemCreateAllOpts struct {
+	Items []*ItemCreateOpts
+}
+
 type ItemRepository interface {
 	FindAll(ctx context.Context) (*ItemList, error)
+	CreateAll(ctx context.Context, opts ItemCreateAllOpts) (*ItemList, error)
 }
