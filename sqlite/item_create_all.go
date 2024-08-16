@@ -10,15 +10,16 @@ import (
 )
 
 func (repo *itemRepo) CreateAll(ctx context.Context, opts cofferni.ItemCreateAllOpts) (*cofferni.ItemList, error) {
-
 	items := make([]*models.Item, len(opts.Items))
+
 	for i, item := range opts.Items {
 		items[i] = &models.Item{
-			CreatedAt:  time.Now(),
-			ID:         uuid.New().String(),
-			ModifiedAt: time.Now(),
-			Name:       item.Name,
-			Available:  true,
+			Available:   true,
+			CreatedAt:   time.Now(),
+			Description: item.Description,
+			ID:          uuid.New().String(),
+			ModifiedAt:  time.Now(),
+			Name:        item.Name,
 		}
 	}
 
@@ -31,11 +32,12 @@ func (repo *itemRepo) CreateAll(ctx context.Context, opts cofferni.ItemCreateAll
 	domainItems := make([]*cofferni.Item, len(items))
 	for i, item := range items {
 		domainItems[i] = &cofferni.Item{
-			CreatedAt:  item.CreatedAt,
-			ID:         cofferni.ItemID(item.ID),
-			ModifiedAt: item.ModifiedAt,
-			Name:       item.Name,
-			Available:  item.Available,
+			Available:   item.Available,
+			CreatedAt:   item.CreatedAt,
+			Description: item.Description,
+			ID:          cofferni.ItemID(item.ID),
+			ModifiedAt:  item.ModifiedAt,
+			Name:        item.Name,
 		}
 	}
 

@@ -8,11 +8,12 @@ import (
 type ItemID string
 
 type Item struct {
-	Available  bool
-	CreatedAt  time.Time
-	ID         ItemID
-	ModifiedAt time.Time
-	Name       string
+	Available   bool
+	CreatedAt   time.Time
+	Description string
+	ID          ItemID
+	ModifiedAt  time.Time
+	Name        string
 }
 
 type ItemFindAllOpts struct {
@@ -24,8 +25,9 @@ type ItemList struct {
 }
 
 type ItemCreateOpts struct {
-	Available bool
-	Name      string
+	Available   bool
+	Description string
+	Name        string
 }
 
 type ItemCreateAllOpts struct {
@@ -36,3 +38,5 @@ type ItemRepository interface {
 	FindAll(ctx context.Context) (*ItemList, error)
 	CreateAll(ctx context.Context, opts ItemCreateAllOpts) (*ItemList, error)
 }
+
+// TODO: Add Validation

@@ -102,9 +102,10 @@ func initDependencies(deps dependencies) {
 	spew.Dump("Item List", items)
 
 	order, err := menuSvc.PlaceOrder(context.Background(), menu.PlaceOrderOpts{
-		ItemID:      items.Items[0].ID,
-		Observation: utils.Pointer("decaf please"),
-		Quantity:    1,
+		CustomerName: "John Doe",
+		ItemID:       items.Items[0].ID,
+		Observation:  utils.Pointer("decaf please"),
+		Quantity:     1,
 	})
 	if err != nil {
 		log.Panicf("err placing order: %v", err)

@@ -13,9 +13,10 @@ func (svc *Service) PlaceOrder(ctx context.Context, opts PlaceOrderOpts) (*Place
 	}
 
 	order, err := svc.OrderRepo.Create(ctx, cofferni.OrderCreateOpts{
-		ItemID:      opts.ItemID,
-		Observation: opts.Observation,
-		Quantity:    opts.Quantity,
+		CustomerName: opts.CustomerName,
+		ItemID:       opts.ItemID,
+		Observation:  opts.Observation,
+		Quantity:     opts.Quantity,
 	})
 
 	if err != nil {
@@ -23,31 +24,38 @@ func (svc *Service) PlaceOrder(ctx context.Context, opts PlaceOrderOpts) (*Place
 	}
 
 	return &PlaceOrderResponse{
-		CreatedAt:   order.CreatedAt,
-		ID:          cofferni.OrderID(order.ID),
-		ItemID:      order.ItemID,
-		ModifiedAt:  order.ModifiedAt,
-		Observation: order.Observation,
-		Quantity:    order.Quantity,
+		CreatedAt:    order.CreatedAt,
+		CustomerName: order.CustomerName,
+		ID:           cofferni.OrderID(order.ID),
+		ItemID:       order.ItemID,
+		ModifiedAt:   order.ModifiedAt,
+		Observation:  order.Observation,
+		Quantity:     order.Quantity,
 	}, nil
 }
 
 type PlaceOrderOpts struct {
-	ItemID      cofferni.ItemID
-	Observation *string
-	Quantity    uint
+	CustomerName string
+	ItemID       cofferni.ItemID
+	Observation  *string
+	Quantity     uint
 }
 
 type PlaceOrderResponse struct {
-	CreatedAt   time.Time
-	ID          cofferni.OrderID
-	ItemID      cofferni.ItemID
-	ModifiedAt  time.Time
-	Observation *string
-	Quantity    uint
+	CreatedAt    time.Time
+	CustomerName string
+	ID           cofferni.OrderID
+	ItemID       cofferni.ItemID
+	ModifiedAt   time.Time
+	Observation  *string
+	Quantity     uint
 }
 
 func (opts PlaceOrderOpts) Validate() error {
+	if opts.CustomerName == "" {
+		return ErrCustomerNameIsRequired
+	}
+
 	if opts.ItemID == "" {
 		return ErrItemIDIsRequired
 	}

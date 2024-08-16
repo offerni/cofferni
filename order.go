@@ -8,19 +8,14 @@ import (
 type OrderID string
 
 type Order struct {
-	CreatedAt   time.Time
-	Fulfilled   bool
-	ID          OrderID
-	ItemID      ItemID
-	ModifiedAt  time.Time
-	Observation *string
-	Quantity    uint
-}
-
-type OrderCreateOpts struct {
-	ItemID      ItemID
-	Observation *string
-	Quantity    uint
+	CreatedAt    time.Time
+	CustomerName string
+	Fulfilled    bool
+	ID           OrderID
+	ItemID       ItemID
+	ModifiedAt   time.Time
+	Observation  *string
+	Quantity     uint
 }
 
 type OrderFindAllOpts struct {
@@ -31,20 +26,18 @@ type OrderList struct {
 	// pagintion later maybe
 }
 
-type OrderUpdateOpts struct {
-	Fulfilled   *bool
-	ID          OrderID
-	Observation *string
-	Quantity    *uint
-}
-
-type OrderRepository interface {
-	Create(ctx context.Context, opts OrderCreateOpts) (*Order, error)
-	FindAll(ctx context.Context) (*OrderList, error)
-	Update(ctx context.Context, opts OrderUpdateOpts) (*Order, error)
+type OrderCreateOpts struct {
+	CustomerName string
+	ItemID       ItemID
+	Observation  *string
+	Quantity     uint
 }
 
 func (opts OrderCreateOpts) Validate() error {
+	if opts.CustomerName == "" {
+		return ErrCustomerNameIsRequired
+	}
+
 	if opts.ItemID == "" {
 		return ErrItemIDIsRequired
 	}
@@ -54,6 +47,13 @@ func (opts OrderCreateOpts) Validate() error {
 	}
 
 	return nil
+}
+
+type OrderUpdateOpts struct {
+	Fulfilled   *bool
+	ID          OrderID
+	Observation *string
+	Quantity    *uint
 }
 
 func (opts OrderUpdateOpts) Validate() error {
@@ -74,4 +74,10 @@ func (opts OrderUpdateOpts) Validate() error {
 	}
 
 	return nil
+}
+
+type OrderRepository interface {
+	Create(ctx context.Context, opts OrderCreateOpts) (*Order, error)
+	FindAll(ctx context.Context) (*OrderList, error)
+	Update(ctx context.Context, opts OrderUpdateOpts) (*Order, error)
 }
