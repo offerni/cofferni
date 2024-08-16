@@ -79,28 +79,28 @@ func initDependencies(deps dependencies) {
 	// TODO: for testing purposes only
 	items, err := menuSvc.ItemList(context.Background())
 	if err != nil {
-		log.Printf("err fetching items: %v", err)
+		log.Panicf("err fetching items: %v", err)
 	}
 
-	spew.Dump("Items", items)
+	spew.Dump("Item List", items)
 
 	order, err := menuSvc.PlaceOrder(context.Background(), menu.PlaceOrderOpts{
-		ItemID:      "1",
+		ItemID:      "",
 		Observation: utils.Pointer("decaf please"),
 		Quantity:    1,
 	})
 	if err != nil {
-		log.Printf("err placing order: %v", err)
+		log.Panicf("err placing order: %v", err)
 	}
 
-	spew.Dump("Order Created!", order)
+	spew.Dump("Order Placed", order)
 
 	orderList, err := menuSvc.OrderList(context.Background())
 	if err != nil {
-		log.Printf("err fetching order list: %v", err)
+		log.Panicf("err fetching orders: %v", err)
 	}
 
-	spew.Dump("Order List!", orderList)
+	spew.Dump("Order List", orderList)
 }
 
 func closeDbConnection(db *connection.DB) {
@@ -110,6 +110,6 @@ func closeDbConnection(db *connection.DB) {
 	}
 
 	if err := sqlDB.Close(); err != nil {
-		log.Printf("err closing database: %v", err)
+		log.Panicf("err closing database: %v", err)
 	}
 }
