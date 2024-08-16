@@ -25,7 +25,7 @@ func (svc *Service) PlaceOrder(ctx context.Context, opts PlaceOrderOpts) (*Place
 	return &PlaceOrderResponse{
 		CreatedAt:   order.CreatedAt,
 		ID:          cofferni.OrderID(order.ID),
-		ItemID:      string(order.ItemID),
+		ItemID:      order.ItemID,
 		ModifiedAt:  order.ModifiedAt,
 		Observation: order.Observation,
 		Quantity:    order.Quantity,
@@ -41,7 +41,7 @@ type PlaceOrderOpts struct {
 type PlaceOrderResponse struct {
 	CreatedAt   time.Time
 	ID          cofferni.OrderID
-	ItemID      string
+	ItemID      cofferni.ItemID
 	ModifiedAt  time.Time
 	Observation *string
 	Quantity    uint

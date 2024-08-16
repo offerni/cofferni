@@ -93,7 +93,7 @@ func initDependencies(deps dependencies) {
 		log.Printf("err seeding data: %v", err)
 	}
 
-	// TODO: for testing purposes only
+	// // TODO: for testing purposes only
 	items, err := menuSvc.ItemList(context.Background())
 	if err != nil {
 		log.Panicf("err fetching items: %v", err)
@@ -102,7 +102,7 @@ func initDependencies(deps dependencies) {
 	spew.Dump("Item List", items)
 
 	order, err := menuSvc.PlaceOrder(context.Background(), menu.PlaceOrderOpts{
-		ItemID:      "c074edbd-2984-4136-b48b-a498ab52ab88",
+		ItemID:      items.Items[0].ID,
 		Observation: utils.Pointer("decaf please"),
 		Quantity:    1,
 	})
@@ -115,6 +115,15 @@ func initDependencies(deps dependencies) {
 	orderList, err := menuSvc.OrderList(context.Background())
 	if err != nil {
 		log.Panicf("err fetching orders: %v", err)
+	}
+
+	_, err = menuSvc.UpdateOrder(context.Background(), menu.UpdateOrderOpts{
+		ID:        orderList.Orders[len(orderList.Orders)-1].ID,
+		Fulfilled: utils.Pointer(false),
+	})
+
+	if err != nil {
+		log.Panicf("err uipdating order: %v", err)
 	}
 
 	spew.Dump("Order List", orderList)

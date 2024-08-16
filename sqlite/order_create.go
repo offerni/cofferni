@@ -10,6 +10,10 @@ import (
 )
 
 func (repo *orderRepo) Create(ctx context.Context, opts cofferni.OrderCreateOpts) (*cofferni.Order, error) {
+	if err := opts.Validate(); err != nil {
+		return nil, err
+	}
+
 	id := uuid.New().String()
 
 	order := &models.Order{
@@ -19,11 +23,9 @@ func (repo *orderRepo) Create(ctx context.Context, opts cofferni.OrderCreateOpts
 		ModifiedAt:  time.Now(),
 		Observation: opts.Observation,
 		Quantity:    opts.Quantity,
-		Fulfilled:   false,
 	}
 
-	err := repo.db.DB.WithContext(ctx).Create(order).Error
-
+	err := repo.db.DB.WithContext(ctx).FirstOrCreate(order).Error
 	if err != nil {
 		return nil, err
 	}
