@@ -2,13 +2,16 @@ package cofferni
 
 import (
 	"context"
+	"time"
 )
 
 type OrderID string
 
 type Order struct {
-	ID          string
-	ItemID      string
+	CreatedAt   time.Time
+	ID          OrderID
+	ItemID      ItemID
+	ModifiedAt  time.Time
 	Observation *string
 	Quantity    uint
 }
@@ -23,13 +26,13 @@ type OrderFindAllOpts struct {
 }
 
 type OrderList struct {
-	Data []Order
+	Data []*Order
 	// pagintion later maybe
 }
 
 type OrderRepository interface {
 	Create(ctx context.Context, opts OrderCreateOpts) (*Order, error)
-	FindAll(ctx context.Context, opts *OrderFindAllOpts) (*OrderList, error)
+	FindAll(ctx context.Context) (*OrderList, error)
 }
 
 func (opts OrderCreateOpts) Validate() error {

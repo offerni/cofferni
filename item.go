@@ -8,18 +8,18 @@ import (
 type ItemID string
 
 type Item struct {
-	ID         string
-	Name       string
 	Available  bool
 	CreatedAt  time.Time
+	ID         ItemID
 	ModifiedAt time.Time
+	Name       string
 }
 
 type ItemFindAllOpts struct {
 }
 
 type ItemList struct {
-	Data []Item
+	Data []*Item
 	// pagintion later maybe
 }
 

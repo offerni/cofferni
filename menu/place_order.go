@@ -23,7 +23,7 @@ func (svc *Service) PlaceOrder(ctx context.Context, opts PlaceOrderOpts) (*Place
 
 	return &PlaceOrderResponse{
 		ID:          cofferni.OrderID(order.ID),
-		ItemID:      order.ItemID,
+		ItemID:      string(order.ItemID),
 		Observation: order.Observation,
 		Quantity:    order.Quantity,
 	}, nil
