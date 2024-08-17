@@ -1,4 +1,11 @@
-import { APIItem, APIOrder, Item, Order } from './types';
+import {
+    APICreateOrderOpts,
+    APIItem,
+    APIOrder,
+    CreateOrderOpts,
+    Item,
+    Order,
+} from './types';
 
 export const convertAPIItemToDomain = (item: APIItem): Item => {
     return {
@@ -23,6 +30,17 @@ export const convertAPIOrderToDomain = (order: APIOrder): Order => {
         itemId: order.item_id,
         itemName: order.item_name,
         modifiedAt: order.modified_at,
+        observation: order.observation,
+        quantity: order.quantity,
+    };
+};
+
+export const convertDomainOrderOptsToAPI = (
+    order: CreateOrderOpts
+): APICreateOrderOpts => {
+    return {
+        customer_name: order.customerName,
+        item_id: order.itemId,
         observation: order.observation,
         quantity: order.quantity,
     };
