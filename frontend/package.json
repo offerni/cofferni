@@ -6,7 +6,8 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "production": "yarn build && yarn start"
     },
     "dependencies": {
         "@headlessui/react": "^2.1.2",

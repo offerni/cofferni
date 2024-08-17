@@ -49,7 +49,7 @@ interface HomeProps {
     error?: string;
 }
 export default function Home({ items, error }: HomeProps) {
-    const { register, handleSubmit, setValue, watch } =
+    const { register, handleSubmit, setValue, watch, reset } =
         useForm<CreateOrderOpts>({
             defaultValues: {
                 quantity: 0,
@@ -91,6 +91,7 @@ export default function Home({ items, error }: HomeProps) {
                 return parsedResponse;
             });
             setCreatedOrder(convertAPIOrderToDomain(response));
+            reset();
         } catch (error) {
             console.log(error);
             toast((error as Error).message, { type: 'error' });
