@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	_ "github.com/davecgh/go-spew/spew"
 	"github.com/go-chi/chi"
 	"github.com/joho/godotenv"
 	"github.com/offerni/cofferni"
