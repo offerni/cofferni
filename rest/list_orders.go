@@ -8,18 +8,16 @@ import (
 	"github.com/offerni/cofferni"
 )
 
-func (srv *Server) OrdersList(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ListOrders(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	w.Header().Set("Content-Type", "application/json")
 
 	orders, err := srv.MenuService.OrderList(ctx)
 	if err != nil {
-		errorJSON, _ := json.Marshal(&ErrorResponse{
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(&ErrorResponse{
 			Error: err.Error(),
 		})
-
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(errorJSON)
 		return
 	}
 

@@ -7,7 +7,7 @@ import (
 	"github.com/offerni/cofferni"
 )
 
-func (svc *Service) UpdateOrder(ctx context.Context, opts UpdateOrderOpts) (*UpdateOrderResponse, error) {
+func (svc *Service) OrderUpdate(ctx context.Context, opts UpdateOrderOpts) (*UpdateOrderResponse, error) {
 	if err := opts.Validate(); err != nil {
 		return nil, err
 	}

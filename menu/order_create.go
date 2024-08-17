@@ -7,7 +7,7 @@ import (
 	"github.com/offerni/cofferni"
 )
 
-func (svc *Service) PlaceOrder(ctx context.Context, opts PlaceOrderOpts) (*PlaceOrderResponse, error) {
+func (svc *Service) OrderCreate(ctx context.Context, opts CreateOrderOpts) (*CreateOrderResponse, error) {
 	if err := opts.Validate(); err != nil {
 		return nil, err
 	}
@@ -23,35 +23,42 @@ func (svc *Service) PlaceOrder(ctx context.Context, opts PlaceOrderOpts) (*Place
 		return nil, err
 	}
 
-	return &PlaceOrderResponse{
+	item, err := svc.itemRepo.Find(ctx, order.ItemID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &CreateOrderResponse{
 		CreatedAt:    order.CreatedAt,
 		CustomerName: order.CustomerName,
 		ID:           cofferni.OrderID(order.ID),
 		ItemID:       order.ItemID,
+		ItemName:     item.Name,
 		ModifiedAt:   order.ModifiedAt,
 		Observation:  order.Observation,
 		Quantity:     order.Quantity,
 	}, nil
 }
 
-type PlaceOrderOpts struct {
+type CreateOrderOpts struct {
 	CustomerName string
 	ItemID       cofferni.ItemID
 	Observation  *string
 	Quantity     uint
 }
 
-type PlaceOrderResponse struct {
+type CreateOrderResponse struct {
 	CreatedAt    time.Time
 	CustomerName string
 	ID           cofferni.OrderID
 	ItemID       cofferni.ItemID
+	ItemName     string
 	ModifiedAt   time.Time
 	Observation  *string
 	Quantity     uint
 }
 
-func (opts PlaceOrderOpts) Validate() error {
+func (opts CreateOrderOpts) Validate() error {
 	if opts.CustomerName == "" {
 		return ErrCustomerNameIsRequired
 	}

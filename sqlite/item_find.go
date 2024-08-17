@@ -8,11 +8,11 @@ import (
 )
 
 func (repo *itemRepo) Find(ctx context.Context, ID cofferni.ItemID) (*cofferni.Item, error) {
-	result := &models.Item{}
+	result := models.Item{}
 
 	query := repo.db.DB.WithContext(ctx)
 
-	err := query.Find(&result).Where("id = ?", ID).Error
+	err := query.Where("id = ?", ID).Find(&result).Error
 	if err != nil {
 		return nil, err
 	}
