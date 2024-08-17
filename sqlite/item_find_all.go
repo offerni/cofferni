@@ -18,11 +18,12 @@ func (repo *itemRepo) FindAll(ctx context.Context) (*cofferni.ItemList, error) {
 	items := make([]*cofferni.Item, len(result))
 	for i, item := range result {
 		items[i] = &cofferni.Item{
-			ID:         cofferni.ItemID(item.ID),
-			Name:       item.Name,
-			Available:  item.Available,
-			CreatedAt:  item.CreatedAt,
-			ModifiedAt: item.ModifiedAt,
+			ID:          cofferni.ItemID(item.ID),
+			Name:        item.Name,
+			Available:   item.Available,
+			CreatedAt:   item.CreatedAt,
+			ModifiedAt:  item.ModifiedAt,
+			Description: item.Description,
 		}
 	}
 

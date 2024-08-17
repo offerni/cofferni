@@ -29,6 +29,7 @@ func (srv *Server) OrdersList(w http.ResponseWriter, r *http.Request) {
 			CreatedAt:   order.CreatedAt,
 			ID:          cofferni.OrderID(order.ID),
 			ItemID:      order.ItemID,
+			ItemName:    order.ItemName,
 			ModifiedAt:  order.ModifiedAt,
 			Observation: order.Observation,
 			Quantity:    order.Quantity,
@@ -50,6 +51,7 @@ type OrderFetchResponse struct {
 	CreatedAt   time.Time        `json:"created_at"`
 	ID          cofferni.OrderID `json:"id"`
 	ItemID      cofferni.ItemID  `json:"item_id"`
+	ItemName    string           `json:"item_name"`
 	ModifiedAt  time.Time        `json:"modified_at"`
 	Observation *string          `json:"observation"`
 	Quantity    uint             `json:"quantity"`
