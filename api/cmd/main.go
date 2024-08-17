@@ -25,7 +25,11 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("err loading: %v", err)
+		if os.IsNotExist(err) {
+			log.Println(".env file not found, using embedded environment variables")
+		} else {
+			log.Fatalf("Error loading .env file: %v", err)
+		}
 	}
 
 	db := initializeDB()
