@@ -12,6 +12,7 @@ import (
 
 	_ "github.com/davecgh/go-spew/spew"
 	"github.com/go-chi/chi"
+	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 	"github.com/offerni/cofferni"
 	"github.com/offerni/cofferni/menu"
@@ -39,9 +40,21 @@ func main() {
 		port = os.Getenv("PORT")
 	}
 
+	corsMiddleware := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"}, // allowing wildcard for now because I'm lazy and this will run only on LAN
+		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	})
+
+	router := chi.NewRouter()
+	router.Use(corsMiddleware.Handler)
+
 	server, err := rest.NewServer(rest.NewServerOpts{
 		MenuService: deps.menuService,
-		Router:      chi.NewRouter(),
+		Router:      router,
 		Port:        port,
 	})
 	if err != nil {
