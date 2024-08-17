@@ -85,7 +85,9 @@ func main() {
 func initializeDB() *connection.DB {
 	log.Println("Running Migration...")
 
-	db, err := connection.Open(connection.DbConfig{Name: fmt.Sprintf("%s.db", os.Getenv("DATABASE_NAME"))})
+	db, err := connection.Open(connection.DbConfig{
+		Name: fmt.Sprintf("%s.db", os.Getenv("DATABASE_NAME")),
+	})
 	if err != nil {
 		panic(err)
 	}
