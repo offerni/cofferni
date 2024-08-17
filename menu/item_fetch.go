@@ -26,7 +26,7 @@ func (svc *Service) ItemFetch(ctx context.Context, ID cofferni.ItemID) (*ItemFet
 type ItemFetchResponse struct {
 	Available   bool
 	CreatedAt   time.Time
-	Description string
+	Description *string
 	ID          cofferni.ItemID
 	ModifiedAt  time.Time
 	Name        string

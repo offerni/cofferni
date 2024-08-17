@@ -10,7 +10,7 @@ type ItemID string
 type Item struct {
 	Available   bool
 	CreatedAt   time.Time
-	Description string
+	Description *string
 	ID          ItemID
 	ModifiedAt  time.Time
 	Name        string
@@ -26,7 +26,7 @@ type ItemList struct {
 
 type ItemCreateOpts struct {
 	Available   bool
-	Description string
+	Description *string
 	Name        string
 }
 

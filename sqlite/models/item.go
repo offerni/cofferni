@@ -7,7 +7,7 @@ import (
 type Item struct {
 	ID          string    `gorm:"not null;primaryKey"`
 	Name        string    `gorm:"not null;uniqueIndex"`
-	Description string    `gorm:"type:text"`
+	Description *string   `gorm:"type:text"`
 	Available   bool      `gorm:"not null;default:false"`
 	CreatedAt   time.Time `gorm:"autoCreateTime"`
 	ModifiedAt  time.Time `gorm:"autoUpdateTime"`

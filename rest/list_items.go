@@ -24,11 +24,12 @@ func (srv *Server) ListItems(w http.ResponseWriter, r *http.Request) {
 	itemsResponse := make([]ItemFetchResponse, len(items.Items))
 	for i, item := range items.Items {
 		itemsResponse[i] = ItemFetchResponse{
-			CreatedAt:  utils.FormatTime(item.CreatedAt),
-			ID:         cofferni.ItemID(item.ID),
-			Available:  item.Available,
-			ModifiedAt: utils.FormatTime(item.ModifiedAt),
-			Name:       item.Name,
+			Available:   item.Available,
+			CreatedAt:   utils.FormatTime(item.CreatedAt),
+			Description: item.Description,
+			ID:          cofferni.ItemID(item.ID),
+			ModifiedAt:  utils.FormatTime(item.ModifiedAt),
+			Name:        item.Name,
 		}
 	}
 
@@ -44,9 +45,10 @@ func (srv *Server) ListItems(w http.ResponseWriter, r *http.Request) {
 }
 
 type ItemFetchResponse struct {
-	Available  bool            `json:"available"`
-	CreatedAt  string          `json:"created_at"`
-	ID         cofferni.ItemID `json:"id"`
-	ModifiedAt string          `json:"modified_at"`
-	Name       string          `json:"name"`
+	Available   bool            `json:"available"`
+	CreatedAt   string          `json:"created_at"`
+	Description *string         `json:"description"`
+	ID          cofferni.ItemID `json:"id"`
+	ModifiedAt  string          `json:"modified_at"`
+	Name        string          `json:"name"`
 }

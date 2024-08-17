@@ -32,12 +32,11 @@ func (repo *itemRepo) CreateAll(ctx context.Context, opts cofferni.ItemCreateAll
 	domainItems := make([]*cofferni.Item, len(items))
 	for i, item := range items {
 		domainItems[i] = &cofferni.Item{
-			Available:   item.Available,
-			CreatedAt:   item.CreatedAt,
-			Description: item.Description,
-			ID:          cofferni.ItemID(item.ID),
-			ModifiedAt:  item.ModifiedAt,
-			Name:        item.Name,
+			Available:  item.Available,
+			CreatedAt:  item.CreatedAt,
+			ID:         cofferni.ItemID(item.ID),
+			ModifiedAt: item.ModifiedAt,
+			Name:       item.Name,
 		}
 	}
 
