@@ -6,6 +6,7 @@ import (
 
 	"github.com/offerni/cofferni"
 	"github.com/offerni/cofferni/menu"
+	"github.com/offerni/cofferni/utils"
 )
 
 func (srv *Server) CreateOrder(w http.ResponseWriter, r *http.Request) {
@@ -41,11 +42,11 @@ func (srv *Server) CreateOrder(w http.ResponseWriter, r *http.Request) {
 
 	response := CreateOrderResponse{
 		&OrderFetchResponse{
-			CreatedAt:   order.CreatedAt,
+			CreatedAt:   utils.FormatTime(order.CreatedAt),
 			ID:          order.ID,
 			ItemID:      order.ItemID,
 			ItemName:    order.ItemName,
-			ModifiedAt:  order.ModifiedAt,
+			ModifiedAt:  utils.FormatTime(order.ModifiedAt),
 			Observation: order.Observation,
 			Quantity:    order.Quantity,
 		},

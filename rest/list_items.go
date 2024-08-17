@@ -3,9 +3,9 @@ package rest
 import (
 	"encoding/json"
 	"net/http"
-	"time"
 
 	"github.com/offerni/cofferni"
+	"github.com/offerni/cofferni/utils"
 )
 
 func (srv *Server) ListItems(w http.ResponseWriter, r *http.Request) {
@@ -24,10 +24,10 @@ func (srv *Server) ListItems(w http.ResponseWriter, r *http.Request) {
 	itemsResponse := make([]ItemFetchResponse, len(items.Items))
 	for i, item := range items.Items {
 		itemsResponse[i] = ItemFetchResponse{
-			CreatedAt:  item.CreatedAt,
+			CreatedAt:  utils.FormatTime(item.CreatedAt),
 			ID:         cofferni.ItemID(item.ID),
 			Available:  item.Available,
-			ModifiedAt: item.ModifiedAt,
+			ModifiedAt: utils.FormatTime(item.ModifiedAt),
 			Name:       item.Name,
 		}
 	}
@@ -45,8 +45,8 @@ func (srv *Server) ListItems(w http.ResponseWriter, r *http.Request) {
 
 type ItemFetchResponse struct {
 	Available  bool            `json:"available"`
-	CreatedAt  time.Time       `json:"created_at"`
+	CreatedAt  string          `json:"created_at"`
 	ID         cofferni.ItemID `json:"id"`
-	ModifiedAt time.Time       `json:"modified_at"`
+	ModifiedAt string          `json:"modified_at"`
 	Name       string          `json:"name"`
 }
