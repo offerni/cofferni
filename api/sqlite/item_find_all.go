@@ -16,7 +16,7 @@ func (repo *itemRepo) FindAll(ctx context.Context, opts cofferni.ItemFindAllOpts
 		query = query.Where("available = ?", *opts.Available)
 	}
 
-	err := query.Order("created_at").Find(&result).Error
+	err := query.Order("name").Find(&result).Error
 	if err != nil {
 		return nil, err
 	}
