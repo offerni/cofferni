@@ -1,5 +1,5 @@
 // API Types
-interface APIItem {
+export interface APIItem {
     available: boolean
     created_at: string
     description?: string
@@ -8,11 +8,11 @@ interface APIItem {
     name: string
 }
 
-interface APIItemsList {
+export interface APIItemsList {
     data: APIItem[]
 }
 
-interface APIOrder {
+export interface APIOrder {
     created_at: string
     customer_name: string
     id: string
@@ -23,18 +23,18 @@ interface APIOrder {
     quantity: number
 }
 
-interface APIOrdersList {
+export interface APIOrdersList {
     data: APIOrder[]
 }
 
-interface APICreateOrderOpts {
+export interface APICreateOrderOpts {
     customer_name: string
     item_id: APIItem['id']
     observation?: string
     quantity: number
 }
 
-interface APIUpdateOrderOpts {
+export interface APIUpdateOrderOpts {
     fulfilled?: boolean
     id: APIOrder['id']
     observation?: string
@@ -42,7 +42,7 @@ interface APIUpdateOrderOpts {
 }
 
 // Domain Types
-interface Item {
+export interface Item {
     available: boolean
     createdAt: string
     description?: string
@@ -51,11 +51,11 @@ interface Item {
     name: string
 }
 
-interface ItemsList {
+export interface ItemsList {
     data: Item[]
 }
 
-interface Order {
+export interface Order {
     createdAt: string
     customerName: string
     id: string
@@ -66,18 +66,18 @@ interface Order {
     quantity: number
 }
 
-interface OrdersList {
+export interface OrdersList {
     data: Order[]
 }
 
-interface CreateOrderOpts {
+export interface CreateOrderOpts {
     customerName: string
     itemId: Item['id']
     observation?: string
     quantity: number
 }
 
-interface UpdateOrderOpts {
+export interface UpdateOrderOpts {
     fulfilled?: boolean
     id: Order['id']
     observation?: string
