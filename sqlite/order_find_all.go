@@ -10,7 +10,7 @@ import (
 func (repo *orderRepo) FindAll(ctx context.Context) (*cofferni.OrderList, error) {
 	result := []*models.Order{}
 
-	err := repo.db.DB.WithContext(ctx).Find(&result).Error
+	err := repo.db.DB.WithContext(ctx).Order("created_at").Find(&result).Error
 	if err != nil {
 		return nil, err
 	}
