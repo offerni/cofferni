@@ -3,8 +3,8 @@ package menu
 import "github.com/offerni/cofferni"
 
 type Service struct {
-	ItemRepo  cofferni.ItemRepository
-	OrderRepo cofferni.OrderRepository
+	itemRepo  cofferni.ItemRepository
+	orderRepo cofferni.OrderRepository
 }
 
 type NewServiceOpts struct {
@@ -18,8 +18,8 @@ func NewService(opts NewServiceOpts) (*Service, error) {
 	}
 
 	return &Service{
-		ItemRepo:  opts.ItemRepository,
-		OrderRepo: opts.OrderRepository,
+		itemRepo:  opts.ItemRepository,
+		orderRepo: opts.OrderRepository,
 	}, nil
 }
 

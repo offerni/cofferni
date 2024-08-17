@@ -8,7 +8,7 @@ import (
 )
 
 func (svc *Service) ItemList(ctx context.Context) (*ItemListResponse, error) {
-	items, err := svc.ItemRepo.FindAll(ctx)
+	items, err := svc.itemRepo.FindAll(ctx)
 	if err != nil {
 		return nil, err
 	}

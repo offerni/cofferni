@@ -4,16 +4,20 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
-	"github.com/davecgh/go-spew/spew"
+	"github.com/go-chi/chi"
 	"github.com/joho/godotenv"
 	"github.com/offerni/cofferni"
 	"github.com/offerni/cofferni/menu"
+	"github.com/offerni/cofferni/rest"
 	"github.com/offerni/cofferni/sqlite"
 	"github.com/offerni/cofferni/sqlite/connection"
 	"github.com/offerni/cofferni/sqlite/models"
-	"github.com/offerni/cofferni/utils"
 )
 
 func main() {
@@ -23,12 +27,44 @@ func main() {
 	}
 
 	db := initializeDB()
-
 	defer closeDbConnection(db)
 
-	initDependencies(dependencies{
+	deps := initDependencies(initDependenciesOpts{
 		db: db,
 	})
+
+	port := "8080"
+	if os.Getenv("PORT") != "" {
+		port = os.Getenv("PORT")
+	}
+
+	server, err := rest.NewServer(rest.NewServerOpts{
+		MenuService: deps.menuService,
+		Router:      chi.NewRouter(),
+		Port:        port,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	go func() {
+		if err := server.Start(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("ListenAndServe(): %v", err)
+		}
+	}()
+
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT, os.Interrupt)
+	<-stop
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatalf("Server forced to shutdown: %v", err)
+	}
+
+	fmt.Println("Server stopped gracefully")
 }
 
 // initializeDB creates the tables in the database if they don't exist already.
@@ -68,11 +104,15 @@ func closeDbConnection(db *connection.DB) {
 	}
 }
 
-type dependencies struct {
+type initDependenciesOpts struct {
 	db *connection.DB
 }
 
-func initDependencies(deps dependencies) {
+type dependencies struct {
+	menuService *menu.Service
+}
+
+func initDependencies(deps initDependenciesOpts) *dependencies {
 	db := deps.db
 
 	// repos
@@ -93,87 +133,25 @@ func initDependencies(deps dependencies) {
 		log.Printf("err seeding data: %v", err)
 	}
 
-	// // TODO: for testing purposes only
-	items, err := menuSvc.ItemList(context.Background())
-	if err != nil {
-		log.Panicf("err fetching items: %v", err)
+	return &dependencies{
+		menuService: menuSvc,
 	}
-
-	spew.Dump("Item List", items)
-
-	order, err := menuSvc.PlaceOrder(context.Background(), menu.PlaceOrderOpts{
-		CustomerName: "John Doe",
-		ItemID:       items.Items[0].ID,
-		Observation:  utils.Pointer("decaf please"),
-		Quantity:     1,
-	})
-	if err != nil {
-		log.Panicf("err placing order: %v", err)
-	}
-
-	spew.Dump("Order Placed", order)
-
-	orderList, err := menuSvc.OrderList(context.Background())
-	if err != nil {
-		log.Panicf("err fetching orders: %v", err)
-	}
-
-	_, err = menuSvc.UpdateOrder(context.Background(), menu.UpdateOrderOpts{
-		ID:        orderList.Orders[len(orderList.Orders)-1].ID,
-		Fulfilled: utils.Pointer(false),
-	})
-
-	if err != nil {
-		log.Panicf("err uipdating order: %v", err)
-	}
-
-	spew.Dump("Order List", orderList)
 }
 
 // seedData populates tables with pre-defined data
 func seedData(itemRepo cofferni.ItemRepository) error {
 	_, err := itemRepo.CreateAll(context.Background(), cofferni.ItemCreateAllOpts{
 		Items: []*cofferni.ItemCreateOpts{
-			{
-				Name:      "Espresso",
-				Available: true,
-			},
-			{
-				Name:      "Iced Espresso",
-				Available: true,
-			},
-			{
-				Name:      "Americano",
-				Available: true,
-			},
-			{
-				Name:      "Iced Americano",
-				Available: true,
-			},
-			{
-				Name:      "Latte",
-				Available: true,
-			},
-			{
-				Name:      "Flat White",
-				Available: true,
-			},
-			{
-				Name:      "Mocha Latte",
-				Available: true,
-			},
-			{
-				Name:      "Iced Mocha Latte",
-				Available: true,
-			},
-			{
-				Name:      "Cappuccino",
-				Available: true,
-			},
-			{
-				Name:      "Hot Chocolate",
-				Available: true,
-			},
+			{Name: "Espresso", Available: true},
+			{Name: "Iced Espresso", Available: true},
+			{Name: "Americano", Available: true},
+			{Name: "Iced Americano", Available: true},
+			{Name: "Latte", Available: true},
+			{Name: "Flat White", Available: true},
+			{Name: "Mocha Latte", Available: true},
+			{Name: "Iced Mocha Latte", Available: true},
+			{Name: "Cappuccino", Available: true},
+			{Name: "Hot Chocolate", Available: true},
 		},
 	})
 

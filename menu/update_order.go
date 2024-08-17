@@ -12,7 +12,7 @@ func (svc *Service) UpdateOrder(ctx context.Context, opts UpdateOrderOpts) (*Upd
 		return nil, err
 	}
 
-	order, err := svc.OrderRepo.Update(ctx, cofferni.OrderUpdateOpts{
+	order, err := svc.orderRepo.Update(ctx, cofferni.OrderUpdateOpts{
 		Fulfilled:   opts.Fulfilled,
 		ID:          opts.ID,
 		Observation: opts.Observation,

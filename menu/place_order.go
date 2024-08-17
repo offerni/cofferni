@@ -12,7 +12,7 @@ func (svc *Service) PlaceOrder(ctx context.Context, opts PlaceOrderOpts) (*Place
 		return nil, err
 	}
 
-	order, err := svc.OrderRepo.Create(ctx, cofferni.OrderCreateOpts{
+	order, err := svc.orderRepo.Create(ctx, cofferni.OrderCreateOpts{
 		CustomerName: opts.CustomerName,
 		ItemID:       opts.ItemID,
 		Observation:  opts.Observation,
