@@ -7,10 +7,16 @@ import (
 	"github.com/offerni/cofferni/sqlite/models"
 )
 
-func (repo *itemRepo) FindAll(ctx context.Context) (*cofferni.ItemList, error) {
+func (repo *itemRepo) FindAll(ctx context.Context, opts cofferni.ItemFindAllOpts) (*cofferni.ItemList, error) {
 	result := []*models.Item{}
 
-	err := repo.db.DB.WithContext(ctx).Order("created_at").Find(&result).Error
+	query := repo.db.DB.WithContext(ctx)
+
+	if opts.Available != nil {
+		query = query.Where("available = ?", *opts.Available)
+	}
+
+	err := query.Order("created_at").Find(&result).Error
 	if err != nil {
 		return nil, err
 	}

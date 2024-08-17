@@ -17,6 +17,7 @@ type Item struct {
 }
 
 type ItemFindAllOpts struct {
+	Available *bool
 }
 
 type ItemList struct {
@@ -35,7 +36,7 @@ type ItemCreateAllOpts struct {
 }
 
 type ItemRepository interface {
-	FindAll(ctx context.Context) (*ItemList, error)
+	FindAll(ctx context.Context, opts ItemFindAllOpts) (*ItemList, error)
 	Find(ctx context.Context, ID ItemID) (*Item, error)
 	CreateAll(ctx context.Context, opts ItemCreateAllOpts) (*ItemList, error)
 }

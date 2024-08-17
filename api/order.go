@@ -19,6 +19,7 @@ type Order struct {
 }
 
 type OrderFindAllOpts struct {
+	Fulfilled *bool
 }
 
 type OrderList struct {
@@ -78,6 +79,6 @@ func (opts OrderUpdateOpts) Validate() error {
 
 type OrderRepository interface {
 	Create(ctx context.Context, opts OrderCreateOpts) (*Order, error)
-	FindAll(ctx context.Context) (*OrderList, error)
+	FindAll(ctx context.Context, opts OrderFindAllOpts) (*OrderList, error)
 	Update(ctx context.Context, opts OrderUpdateOpts) (*Order, error)
 }

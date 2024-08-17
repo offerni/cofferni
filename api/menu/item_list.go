@@ -6,8 +6,10 @@ import (
 	"github.com/offerni/cofferni"
 )
 
-func (svc *Service) ItemList(ctx context.Context) (*ItemListResponse, error) {
-	items, err := svc.itemRepo.FindAll(ctx)
+func (svc *Service) ItemList(ctx context.Context, opts ItemListOpts) (*ItemListResponse, error) {
+	items, err := svc.itemRepo.FindAll(ctx, cofferni.ItemFindAllOpts{
+		Available: opts.FilterByAvailable,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -28,6 +30,10 @@ func (svc *Service) ItemList(ctx context.Context) (*ItemListResponse, error) {
 	return &ItemListResponse{
 		Items: itemsResponse,
 	}, nil
+}
+
+type ItemListOpts struct {
+	FilterByAvailable *bool
 }
 
 type ItemListResponse struct {

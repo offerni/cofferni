@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/offerni/cofferni"
+	"github.com/offerni/cofferni/menu"
 	"github.com/offerni/cofferni/utils"
 )
 
@@ -12,7 +13,18 @@ func (srv *Server) ListOrders(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	w.Header().Set("Content-Type", "application/json")
 
-	orders, err := srv.MenuService.OrderList(ctx)
+	filterByFulfilled, err := utils.StringToBool(r.URL.Query().Get("fulfilled"))
+	if err != nil {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		json.NewEncoder(w).Encode(&ErrorResponse{
+			Error: err.Error(),
+		})
+		return
+	}
+
+	orders, err := srv.MenuService.OrderList(ctx, menu.OrderListOpts{
+		FilterByFulfilled: filterByFulfilled,
+	})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(&ErrorResponse{

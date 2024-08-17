@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/offerni/cofferni"
+	"github.com/offerni/cofferni/menu"
 	"github.com/offerni/cofferni/utils"
 )
 
@@ -12,7 +13,18 @@ func (srv *Server) ListItems(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	w.Header().Set("Content-Type", "application/json")
 
-	items, err := srv.MenuService.ItemList(ctx)
+	filterByAvailable, err := utils.StringToBool(r.URL.Query().Get("available"))
+	if err != nil {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		json.NewEncoder(w).Encode(&ErrorResponse{
+			Error: err.Error(),
+		})
+		return
+	}
+
+	items, err := srv.MenuService.ItemList(ctx, menu.ItemListOpts{
+		FilterByAvailable: filterByAvailable,
+	})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(&ErrorResponse{

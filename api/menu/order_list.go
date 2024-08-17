@@ -7,13 +7,15 @@ import (
 	"github.com/offerni/cofferni"
 )
 
-func (svc *Service) OrderList(ctx context.Context) (*OrderListResponse, error) {
-	orders, err := svc.orderRepo.FindAll(ctx)
+func (svc *Service) OrderList(ctx context.Context, opts OrderListOpts) (*OrderListResponse, error) {
+	orders, err := svc.orderRepo.FindAll(ctx, cofferni.OrderFindAllOpts{
+		Fulfilled: opts.FilterByFulfilled,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	items, err := svc.itemRepo.FindAll(ctx)
+	items, err := svc.itemRepo.FindAll(ctx, cofferni.ItemFindAllOpts{})
 	if err != nil {
 		return nil, err
 	}
@@ -57,4 +59,8 @@ type OrderFetchResponse struct {
 
 type OrderListResponse struct {
 	Orders []*OrderFetchResponse
+}
+
+type OrderListOpts struct {
+	FilterByFulfilled *bool
 }
