@@ -2,7 +2,6 @@ package menu
 
 import (
 	"context"
-	"time"
 
 	"github.com/offerni/cofferni"
 )
@@ -29,14 +28,17 @@ func (svc *Service) OrderCreate(ctx context.Context, opts CreateOrderOpts) (*Cre
 	}
 
 	return &CreateOrderResponse{
-		CreatedAt:    order.CreatedAt,
-		CustomerName: order.CustomerName,
-		ID:           cofferni.OrderID(order.ID),
-		ItemID:       order.ItemID,
-		ItemName:     item.Name,
-		ModifiedAt:   order.ModifiedAt,
-		Observation:  order.Observation,
-		Quantity:     order.Quantity,
+		&OrderFetchResponse{
+			CreatedAt:    order.CreatedAt,
+			CustomerName: order.CustomerName,
+			Fulfilled:    order.Fulfilled,
+			ID:           cofferni.OrderID(order.ID),
+			ItemID:       order.ItemID,
+			ItemName:     item.Name,
+			ModifiedAt:   order.ModifiedAt,
+			Observation:  order.Observation,
+			Quantity:     order.Quantity,
+		},
 	}, nil
 }
 
@@ -48,14 +50,7 @@ type CreateOrderOpts struct {
 }
 
 type CreateOrderResponse struct {
-	CreatedAt    time.Time
-	CustomerName string
-	ID           cofferni.OrderID
-	ItemID       cofferni.ItemID
-	ItemName     string
-	ModifiedAt   time.Time
-	Observation  *string
-	Quantity     uint
+	*OrderFetchResponse
 }
 
 func (opts CreateOrderOpts) Validate() error {

@@ -26,13 +26,15 @@ func (svc *Service) OrderList(ctx context.Context) (*OrderListResponse, error) {
 	ordersResponse := make([]*OrderFetchResponse, len(orders.Data))
 	for i, order := range orders.Data {
 		ordersResponse[i] = &OrderFetchResponse{
-			CreatedAt:   order.CreatedAt,
-			ID:          cofferni.OrderID(order.ID),
-			ItemID:      cofferni.ItemID(order.ItemID),
-			ItemName:    itemMap[cofferni.ItemID(order.ItemID)].Name,
-			ModifiedAt:  order.ModifiedAt,
-			Observation: order.Observation,
-			Quantity:    order.Quantity,
+			CreatedAt:    order.CreatedAt,
+			CustomerName: order.CustomerName,
+			Fulfilled:    order.Fulfilled,
+			ID:           cofferni.OrderID(order.ID),
+			ItemID:       cofferni.ItemID(order.ItemID),
+			ItemName:     itemMap[cofferni.ItemID(order.ItemID)].Name,
+			ModifiedAt:   order.ModifiedAt,
+			Observation:  order.Observation,
+			Quantity:     order.Quantity,
 		}
 	}
 
@@ -42,13 +44,15 @@ func (svc *Service) OrderList(ctx context.Context) (*OrderListResponse, error) {
 }
 
 type OrderFetchResponse struct {
-	CreatedAt   time.Time
-	ID          cofferni.OrderID
-	ItemID      cofferni.ItemID
-	ItemName    string
-	ModifiedAt  time.Time
-	Observation *string
-	Quantity    uint
+	CreatedAt    time.Time
+	CustomerName string
+	Fulfilled    bool
+	ID           cofferni.OrderID
+	ItemID       cofferni.ItemID
+	ItemName     string
+	ModifiedAt   time.Time
+	Observation  *string
+	Quantity     uint
 }
 
 type OrderListResponse struct {

@@ -23,9 +23,11 @@ func (repo *orderRepo) Update(ctx context.Context, opts cofferni.OrderUpdateOpts
 	if opts.Fulfilled != nil {
 		order.Fulfilled = *opts.Fulfilled
 	}
+
 	if opts.Observation != nil && *opts.Observation != "" {
 		order.Observation = opts.Observation
 	}
+
 	if opts.Quantity != nil {
 		order.Quantity = *opts.Quantity
 	}
@@ -40,15 +42,16 @@ func (repo *orderRepo) Update(ctx context.Context, opts cofferni.OrderUpdateOpts
 
 	var orderResponse = models.Order{}
 
-	repo.db.DB.Find(&orderResponse)
+	repo.db.DB.Where("id = ?", opts.ID).Find(&orderResponse)
 
 	return &cofferni.Order{
-		CreatedAt:   orderResponse.CreatedAt,
-		ID:          cofferni.OrderID(orderResponse.ID),
-		ItemID:      cofferni.ItemID(orderResponse.ItemID),
-		ModifiedAt:  orderResponse.ModifiedAt,
-		Observation: orderResponse.Observation,
-		Quantity:    orderResponse.Quantity,
-		Fulfilled:   orderResponse.Fulfilled,
+		CreatedAt:    orderResponse.CreatedAt,
+		ID:           cofferni.OrderID(orderResponse.ID),
+		ItemID:       cofferni.ItemID(orderResponse.ItemID),
+		ModifiedAt:   orderResponse.ModifiedAt,
+		Observation:  orderResponse.Observation,
+		Quantity:     orderResponse.Quantity,
+		Fulfilled:    orderResponse.Fulfilled,
+		CustomerName: orderResponse.CustomerName,
 	}, nil
 }

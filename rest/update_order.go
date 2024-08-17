@@ -9,11 +9,11 @@ import (
 	"github.com/offerni/cofferni/utils"
 )
 
-func (srv *Server) CreateOrder(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) UpdateOrder(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	w.Header().Set("Content-Type", "application/json")
 
-	var request CreateOrderRequest
+	var request UpdateOrderRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		errorJSON, _ := json.Marshal(&ErrorResponse{
 			Error: "Invalid Body",
@@ -24,11 +24,11 @@ func (srv *Server) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	order, err := srv.MenuService.OrderCreate(ctx, menu.CreateOrderOpts{
-		CustomerName: request.CustomerName,
-		ItemID:       request.ItemID,
-		Observation:  request.Observation,
-		Quantity:     request.Quantity,
+	order, err := srv.MenuService.OrderUpdate(ctx, menu.UpdateOrderOpts{
+		Fulfilled:   request.Fulfilled,
+		ID:          request.ID,
+		Observation: request.Observation,
+		Quantity:    request.Quantity,
 	})
 	if err != nil {
 		errorJSON, _ := json.Marshal(&ErrorResponse{
@@ -40,7 +40,7 @@ func (srv *Server) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := CreateOrderResponse{
+	response := UpdateOrderResponse{
 		&OrderFetchResponse{
 			CreatedAt:    utils.FormatTime(order.CreatedAt),
 			CustomerName: order.CustomerName,
@@ -48,26 +48,26 @@ func (srv *Server) CreateOrder(w http.ResponseWriter, r *http.Request) {
 			ID:           order.ID,
 			ItemID:       order.ItemID,
 			ItemName:     order.ItemName,
-			ModifiedAt:   utils.FormatTime(order.ModifiedAt),
+			ModifiedAt:   utils.FormatTime(order.CreatedAt),
 			Observation:  order.Observation,
 			Quantity:     order.Quantity,
 		},
 	}
 
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
 
-type CreateOrderRequest struct {
-	CustomerName string          `json:"customer_name"`
-	ItemID       cofferni.ItemID `json:"item_id"`
-	Observation  *string         `json:"observation"`
-	Quantity     uint            `json:"quantity"`
+type UpdateOrderRequest struct {
+	Fulfilled   *bool            `json:"fulfilled"`
+	ID          cofferni.OrderID `json:"id"`
+	Observation *string          `json:"observation"`
+	Quantity    *uint            `json:"quantity"`
 }
 
-type CreateOrderResponse struct {
+type UpdateOrderResponse struct {
 	*OrderFetchResponse
 }

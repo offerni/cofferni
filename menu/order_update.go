@@ -2,7 +2,6 @@ package menu
 
 import (
 	"context"
-	"time"
 
 	"github.com/offerni/cofferni"
 )
@@ -23,23 +22,28 @@ func (svc *Service) OrderUpdate(ctx context.Context, opts UpdateOrderOpts) (*Upd
 		return nil, err
 	}
 
+	item, err := svc.itemRepo.Find(ctx, order.ItemID)
+	if err != nil {
+		return nil, err
+	}
+
 	return &UpdateOrderResponse{
-		CreatedAt:   order.CreatedAt,
-		ID:          cofferni.OrderID(order.ID),
-		ItemID:      order.ItemID,
-		ModifiedAt:  order.ModifiedAt,
-		Observation: order.Observation,
-		Quantity:    order.Quantity,
+		&OrderFetchResponse{
+			CreatedAt:    order.CreatedAt,
+			CustomerName: order.CustomerName,
+			Fulfilled:    order.Fulfilled,
+			ID:           cofferni.OrderID(order.ID),
+			ItemID:       order.ItemID,
+			ItemName:     item.Name,
+			ModifiedAt:   order.ModifiedAt,
+			Observation:  order.Observation,
+			Quantity:     order.Quantity,
+		},
 	}, nil
 }
 
 type UpdateOrderResponse struct {
-	CreatedAt   time.Time
-	ID          cofferni.OrderID
-	ItemID      cofferni.ItemID
-	ModifiedAt  time.Time
-	Observation *string
-	Quantity    uint
+	*OrderFetchResponse
 }
 
 type UpdateOrderOpts struct {

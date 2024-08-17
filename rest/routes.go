@@ -7,6 +7,7 @@ func (s *Server) routes() {
 	s.Router.Route("/orders", func(r chi.Router) {
 		r.Get("/", s.ListOrders)
 		r.Post("/", s.CreateOrder)
+		r.Patch("/", s.UpdateOrder)
 	})
 
 	// items group
