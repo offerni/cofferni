@@ -1,4 +1,4 @@
-import { APIItem, APIOrder, Item, Order } from './types'
+import { APIItem, APIOrder, Item, Order } from './types';
 
 export const convertAPIItemToDomain = (item: APIItem): Item => {
     return {
@@ -8,12 +8,12 @@ export const convertAPIItemToDomain = (item: APIItem): Item => {
         id: item.id,
         modifiedAt: item.modified_at,
         name: item.name,
-    }
-}
+    };
+};
 
 export const convertAPIItemsListToDomain = (itemsList: APIItem[]): Item[] => {
-    return itemsList.map(convertAPIItemToDomain)
-}
+    return itemsList.map(convertAPIItemToDomain);
+};
 
 export const convertAPIOrderToDomain = (order: APIOrder): Order => {
     return {
@@ -25,11 +25,11 @@ export const convertAPIOrderToDomain = (order: APIOrder): Order => {
         modifiedAt: order.modified_at,
         observation: order.observation,
         quantity: order.quantity,
-    }
-}
+    };
+};
 
 export const convertAPIOrdersListToDomain = (
     ordersList: APIOrder[]
 ): Order[] => {
-    return ordersList.map(convertAPIOrderToDomain)
-}
+    return ordersList.map(convertAPIOrderToDomain);
+};
