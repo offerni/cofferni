@@ -17,6 +17,10 @@ func (repo *itemRepo) Find(ctx context.Context, ID cofferni.ItemID) (*cofferni.I
 		return nil, err
 	}
 
+	if result == (models.Item{}) {
+		return nil, nil
+	}
+
 	return &cofferni.Item{
 		Available:   result.Available,
 		CreatedAt:   result.CreatedAt,

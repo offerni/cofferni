@@ -11,6 +11,15 @@ func (svc *Service) OrderCreate(ctx context.Context, opts CreateOrderOpts) (*Cre
 		return nil, err
 	}
 
+	item, err := svc.itemRepo.Find(ctx, opts.ItemID)
+	if err != nil {
+		return nil, err
+	}
+
+	if item == nil {
+		return nil, ErrItemNotFound
+	}
+
 	order, err := svc.orderRepo.Create(ctx, cofferni.OrderCreateOpts{
 		CustomerName: opts.CustomerName,
 		ItemID:       opts.ItemID,
@@ -18,11 +27,6 @@ func (svc *Service) OrderCreate(ctx context.Context, opts CreateOrderOpts) (*Cre
 		Quantity:     opts.Quantity,
 	})
 
-	if err != nil {
-		return nil, err
-	}
-
-	item, err := svc.itemRepo.Find(ctx, order.ItemID)
 	if err != nil {
 		return nil, err
 	}
