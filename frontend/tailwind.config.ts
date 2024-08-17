@@ -7,6 +7,7 @@ const config: Config = {
         './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     ],
     theme: {
+        // ref https://colorhunt.co/palette/884a39c38154ffc26ff9e0bb
         extend: {
             primary: {
                 light: '#A86854',
