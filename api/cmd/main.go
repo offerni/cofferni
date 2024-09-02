@@ -172,6 +172,8 @@ func seedData(itemRepo cofferni.ItemRepository) error {
 			{Name: "Iced Mocha Latte", Available: true},
 			{Name: "Cappuccino", Available: true},
 			{Name: "Hot Chocolate", Available: true},
+			{Name: "Pumpkin Spice Latte", Available: true},
+			{Name: "Affogato", Available: true},
 		},
 	})
 
