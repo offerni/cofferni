@@ -162,9 +162,7 @@ func initDependencies(deps initDependenciesOpts) *dependencies {
 func seedData(itemRepo cofferni.ItemRepository) error {
 	_, err := itemRepo.CreateAll(context.Background(), cofferni.ItemCreateAllOpts{
 		Items: []*cofferni.ItemCreateOpts{
-			{Name: "Aperol Spritz", Available: true},
 			{Name: "Espresso", Available: true},
-			{Name: "Espresso Martini", Available: true},
 			{Name: "Iced Espresso", Available: true},
 			{Name: "Americano", Available: true},
 			{Name: "Iced Americano", Available: true},
@@ -176,6 +174,8 @@ func seedData(itemRepo cofferni.ItemRepository) error {
 			{Name: "Hot Chocolate", Available: true},
 			{Name: "Pumpkin Spice Latte", Available: true},
 			{Name: "Affogato", Available: true},
+			{Name: "(Cocktail) Aperol Spritz", Available: true},
+			{Name: "(Cocktail) Espresso Martini", Available: true},
 		},
 	})
 
